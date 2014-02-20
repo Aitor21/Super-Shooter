@@ -13,7 +13,7 @@
         , y = this.game.height / 2;
 
 
-      this.titleTxt = this.add.bitmapText(x, 200, '>High Score<', {font: '16px minecraftia', align: 'center'});
+      this.titleTxt = this.add.bitmapText(x, 200, '>Highscore<', {font: '16px minecraftia', align: 'center'});
       this.titleTxt.anchor.setTo(0.5, 0.5);
 
       this.backButton = this.add.button(this.world.centerX, 600, 'backButton', function(){this.game.state.start('menu');}, this, 2, 1, 0);
@@ -30,7 +30,7 @@
     }
   };
 
-  window['naves'] = window['naves'] || {};
-  window['naves'].Highscore = Highscore;
+  window['SuperShooter'] = window['SuperShooter'] || {};
+  window['SuperShooter'].Highscore = Highscore;
 
 }());

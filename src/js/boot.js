@@ -29,8 +29,7 @@
     }
   };
 
-  window['supershooter'] = window['supershooter'] || {};
-  window['supershooter'].Boot = Boot;
+  window['SuperShooter'] = window['SuperShooter'] || {};
+  window['SuperShooter'].Boot = Boot;
 
 }());
-
