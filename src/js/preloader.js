@@ -16,13 +16,16 @@
       this.load.setPreloadSprite(this.asset);
      /* this.load.image('player', 'assets/player.png');
       this.load.image('spaceship', 'assets/spaceship.png');
-      this.load.image('bullet', 'assets/Bullet.png');*/
+      this.load.image('bullet', 'assets/Bullet.png');
+      game.load.image('alien', 'assets/sprites/space-baddie.png');
+    game.load.image('ship', 'assets/sprites/shmup-ship.png');*/
       this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
       this.load.spritesheet('startButton', 'assets/button_sprite_sheet.png', 193, 71);
       this.load.spritesheet('highscoreButton', 'assets/button_sprite_sheet.png', 193, 71);
       this.load.spritesheet('backButton', 'assets/button_sprite_sheet.png', 193, 71);
       this.load.spritesheet('optionsButton', 'assets/button_sprite_sheet.png', 193, 71);
     },
+
 
     create: function () {
       this.asset.cropEnabled = false;
