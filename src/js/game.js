@@ -11,7 +11,7 @@
 
   Game.prototype = {
     create: function () {
-    var x = this.game.width / 2; 
+    var x = this.game.width / 2;
     var y = this.game.height / 2;
    
 
@@ -19,13 +19,25 @@
     
     this.bullets = this.add.group();
     this.bullets.createMultiple(2 , 'bullet');
-    this.bullets.callAll('events.onOutOfBounds.add', 'events.onOutOfBounds', function(bullet){bullet.kill()}, this);
+    this.bullets.callAll('events.onOutOfBounds.add', 'events.onOutOfBounds', function(bullet){bullet.kill()}, this); // esta lina de codigo no la pillo Aitor
 
     this.enemys = this.add.group();
-    this.enemys.createMultiple(20, 'enemy');
+    this.enemys.createMultiple(10, 'enemy');
     this.enemys.setAll('outOfBoundsKill', true);
 
-//gustaria tener estos asteroides
+    this.asteroids = this.add.group();
+    this.asteroids.createMultiple(20, 'asteroids');
+    this.asteroids.setAll('outOfBoundsKill', true);
+
+
+
+
+
+
+
+
+
+/*//gustaria tener estos asteroides
     this.asteroids = this.add.group();
     this.asteroids.createMultiple(20, 'asteroids');
     this.asteroids.setAll('outOfBoundsKill', true);
@@ -61,30 +73,34 @@
     
     },
 
-  update: function() {
+  update: function() 
+  {
+    var UPKey;
+    var LEFTKey;
+    var DOWNKey;
+    var RIGHTKey;
+
+//naves enemigas o asterodes aitor? 
         
-        var UPKey;
-        var LEFTKey;
-        var DOWNKey;
-        var RIGHTKey;
-        //naves enemigas
-        this.enemysCheck = this.enemys.getFirstExists(false)
-    if (this.enemysCheck){
+    this.enemysCheck = this.enemys.getFirstExists(false);
+    if (this.enemysCheck)
+    {
       this.enemysCheck.reset(Math.random() * 1000,-10);
       this.enemysCheck.body.velocity.y = (Math.random()* 500);
       this.enemysCheck.body.velocity.x = (Math.random()* 500 - 250);
-
     }
+
 //movimiento de la nave
+
     if (this.input.keyboard.isDown(Phaser.Keyboard.W) && this.player.y>5)
     {
       this.player.y -=6;
     }
+
     else if (this.input.keyboard.isDown(Phaser.Keyboard.S)&& this.player.y<960)
     {
       this.player.y +=6;
     }
-
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.A) && this.player.x>8)
     {
@@ -94,12 +110,15 @@
     {
       this.player.x +=6;
     }
+
 //disparo nave
+
     if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
     {
       this.fireBullet();
     }
-    },
+
+  },
     
 //disparos
     fireBullet: function() {
@@ -113,9 +132,9 @@
       this.bullet = this.bullets.getFirstExists(false);
       if (this.bullet)
       {
-        this.bullet.reset(this.player.x, this.player.y - 31);
-        this.bullet.body.velocity.y = -800;
-        this.bulletTime = this.time.now + 300;
+        this.bullet.reset(this.player.x, this.player.y/* - 31 */);
+        this.bullet.body.velocity.y = -900;
+        this.bulletTime = this.time.now + 200;
       }
     }
   },

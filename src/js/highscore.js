@@ -9,8 +9,7 @@
   Highscore.prototype = {
 
     create: function () {
-      var x = this.game.width / 2
-        , y = this.game.height / 2;
+      var x = this.game.width / 2, y = this.game.height / 2;
 
 
       this.titleTxt = this.add.bitmapText(x, 200, '>Highscore<', {font: '16px minecraftia', align: 'center'});
