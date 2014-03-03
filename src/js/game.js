@@ -8,8 +8,16 @@
     this.aliens = null;
     this.bulletTime=0;
     this.enemy = 0;
+    this.enemyBullet;
     this.asteroid = null;
     this.asteroids = null;
+    this.score = 0;
+    this.scoreString = '';
+    this.scoreText;
+    this.lives;
+    this.stateText;
+    this.firingTimer = 0;
+    this.ship;
   }
 
   Game.prototype =
@@ -19,50 +27,51 @@
     var x = this.game.width / 2;
     var y = this.game.height / 2;
    
+//posicion del jugador inicial
+    this.player = this.add.sprite (460, 890, 'spaceship');
 
-    this.player = this.add.sprite (460, 940, 'spaceship');
-    
+//generar bullets jugador
     this.bullets = this.add.group();
-    this.bullets.createMultiple(2 , 'bullet');
+    this.bullets.createMultiple(3 , 'bullet');
     this.bullets.callAll('events.onOutOfBounds.add', 'events.onOutOfBounds', function(bullet){bullet.kill();}, this);
 
+//generar enemigos
     this.enemys = this.add.group();
     this.enemys.createMultiple(15, 'enemy');
     this.enemys.setAll('outOfBoundsKill', true);
 
+//generar grupo asteroides
     this.asteroids = this.add.group();
     this.asteroids.createMultiple(12, 'asteroids');
     this.asteroids.setAll('outOfBoundsKill', true);
+
+//generar bullets enemigo
+    this.enemyBullets = this.add.group();
+    this.enemyBullets.createMultiple(30, 'enemyBullet');
+    this.enemyBullets.setAll('events.onOutOfBounds.add', 'events.onOutOfBounds', true);
     
-    },
-//esto se puede ir a tomar por culo
+    //  The score
+    this.scoreString = 'Score : ';
+    this.scoreText = this.add.text(10, 30, this.scoreString + this.score, { fontSize: '34px', fill: '#fff' });
+
+    //  Lives
+    this.lives = this.add.group();
+    this.add.text(this.world.width - 350, 30, 'Lives : ', { fontSize: '34px', fill: '#fff' });
+
+    //  Text
+    this.stateText = this.add.text(this.world.centerX,this.world.centerY,'', { fontSize: '84px', fill: '#fff' });
+    this.stateText.anchor.setTo(0.5, 0.5);
+    this.stateText.visible = false;
 
 
-   /* asteroidcreate: function ()
+    for (var i = 0; i < 3; i++) 
     {
-
-    for (var y = 0; y < 12; y++)
-    {
-        for (var x = 0; x < 17; x++)
-        {
-            var asteroids = this.asteroid.create(12 + x * 59, y * 1000, 'asteroids');
-            asteroid.name = 'asteroids' + x.toString() + y.toString();
-            asteroid.events.onOutOfBounds.add(function (asteroid)
-            {
-
-              //  Move the alien to the top of the screen again
-              //asteroid.reset(asteroid.x, -100);
-
-              //  And give it a new random velocity
-              asteroid.body.velocity.y = 50 + Math.random() * 150;
-          
-            }, this);
-
-            asteroid.body.velocity.y = 40 + Math.random() * 100;
-        }
+        this.ship = this.lives.create(this.world.width - 150 + (70 * i), 60, 'spaceship');
+        this.ship.anchor.setTo(2, 0.5);
+        this.ship.alpha = 0.3;
     }
-  },*/
 
+    },
 
   update: function()
   {
@@ -94,21 +103,21 @@
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.W) && this.player.y>5)
     {
-      this.player.y -=6;
+      this.player.y -=6,2;
     }
 
     else if (this.input.keyboard.isDown(Phaser.Keyboard.S)&& this.player.y<960)
     {
-      this.player.y +=6;
+      this.player.y +=6,2;
     }
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.A) && this.player.x>8)
     {
-      this.player.x -=6;
+      this.player.x -=6,2;
     }
     else if (this.input.keyboard.isDown(Phaser.Keyboard.D) &&this.player.x<960)
     {
-      this.player.x +=6;
+      this.player.x +=6,2;
     }
 
 //disparo nave
@@ -116,32 +125,21 @@
     if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
     {
       this.fireBullet();
-      this.enemyFireBullet();
     }
 
 
-    this.physics.overlap(this.bullets, this.enemys, function(bullet,enemy) { bullet.kill(); enemy.damage(1);}, null, this);
-    this.physics.overlap(this.player, this.enemys, function(player,enemy) { enemy.kill(); player.damage(1);}, null, this);
+    this.physics.overlap(this.bullets, this.enemys, function(bullet,enemy) { bullet.kill(); enemy.kill();if(enemy.kill() && bullet.kill()){this.score += 20;this.scoreText.content = this.scoreString + this.score;}}, null, this); //Añade puntuacion y mata al enemigo y bullet
+    this.physics.overlap(this.player, this.enemys, function(player,enemy) { enemy.kill(); player.damage(0.34); this.live = this.lives.getFirstAlive();if (this.live){this.live.kill();}}, null, this); //reduce 1na vida de player y mata enemigo.
     this.physics.overlap(this.enemys, this.enemys, function(enemy) { enemy.kill();}, null, this);
-
-    /*if (this.player.health == 0){
-      this.game.state.start('gameover');
-    }
-    var life = this.player.health;
-    this.healthTxt = this.add.bitmapText(10, 10, 'Health: ' + life, {font: '16px minecraftia', align: 'center'});
-
-    },*/
-
-
+    this.physics.overlap(this.asteroids, this.asteroids,  function(asteroid){asteroid.kill();}, null, this);
+    this.physics.overlap(this.enemys, this.asteroids, function(enemy){enemy.kill();}, null, this);
+    this.physics.overlap(this.player, this.asteroids, function(player) {player.kill();this.live = this.lives.getFirstAlive();if (this.live){this.live.kill();}}, null, this);//hace falta mejorar con el tiempo my friend...
+    this.physics.overlap(this.bullets, this.asteroids, function(asteroid) {asteroid.kill();}, null, this);
 
   },
   
-//disparos
-    fireBullet: function() {
-
-    var bullet;
-    var bullets;
-    var bulletTime = 0;
+  fireBullet: function() 
+{
 
     if (this.time.now > this.bulletTime)
     {
@@ -155,25 +153,7 @@
     }
   },
 
-      enemyFireBullet: function()
-      {
-
-        var bulletenemy;
-        var bulletsenemy;
-        var bulletenemyTime = 0;
-        if (this.time.now > this.bulletenemyTime)
-    {
-      this.bulletenemy = this.bulletsenemy.getFirstExists(false);
-      if (this.bulletenemy)
-      {
-        this.bulletenemy.reset(this.enemys.x, this.enemys.y + 23 );
-        this.bulletenemy.body.velocity.y = -900;
-        this.bulletenemyTime = this.time.now + 200;
-      }
-    }
-  },
-
-  };
+}
 
 
   window['SuperShooter'] = window['SuperShooter'] || {};

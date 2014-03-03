@@ -18,11 +18,11 @@
       this.load.image('spaceship', 'http://127.0.0.1:9000/assets/spaceship with fire.gif'); // por fin ya funcionan!!
       this.load.image('bullet', 'http://127.0.0.1:9000/assets/orange arrow bullet.png');
       this.load.image('enemy', 'http://127.0.0.1:9000/assets/alien96.gif');
-      //this.load.image('asteroids', 'http://127.0.0.1:9000/assets/asteroids.png');  // asteroides gigantes funciona pero no lo metas o sufriras
+      this.load.image('asteroids', 'http://127.0.0.1:9000/assets/asteroids.png');  // asteroides gigantes funciona pero no lo metas o sufriras
       //this.load.image('ship', 'assets/sprites/shmup-ship.png');
       //this.load.image('enemybullets', 'http://127.0.0.1:9000/assets/orange arrow bullet.png');
       this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
-      this.load.spritesheet('startButton', 'assets/button_sprite_sheet.png', 193, 71);
+      this.load.spritesheet('startButton', 'http://127.0.0.1:9000/assets/button_sprite_sheet.png', 193, 71);
       this.load.spritesheet('highscoreButton', 'assets/button_sprite_sheet.png', 193, 71);
       this.load.spritesheet('backButton', 'assets/button_sprite_sheet.png', 193, 71);
       this.load.spritesheet('optionsButton', 'assets/button_sprite_sheet.png', 193, 71);
