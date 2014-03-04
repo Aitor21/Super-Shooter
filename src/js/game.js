@@ -17,6 +17,7 @@
     this.stateText;
     this.firingTimer = 0;
     this.ship;
+    this.vidas = null;
   }
 
   Game.prototype =
@@ -25,9 +26,14 @@
     {
     var x = this.game.width / 2;
     var y = this.game.height / 2;
+
+    this.vidas = 3;
+
+//load bg
+this.background = this.game.add.tileSprite(0, 0, 1080, 1000, 'background');
    
 //posicion del jugador inicial
-    this.player = this.add.sprite (460, 890, 'spaceship');
+    this.player = this.add.sprite (510, 890, 'spaceship');
 
 //generar bullets jugador
     this.bullets = this.add.group();
@@ -44,24 +50,13 @@
     this.asteroids.createMultiple(12, 'asteroides medianos');
     this.asteroids.setAll('outOfBoundsKill', true);
     
-    //this.asteroids.animations.add('fly', [0,1,2,3], 20, true);
-    /*this.asteroids = this.add.sprite(72, 72, 'asteroids');
-    this.asteroids.animations.add('rotate');
-    this.asteroids.animations.play('rotate', 15, true);*/
-    //this.asteroids.play('fly');
-
-//generar bullets enemigo
-    this.enemyBullets = this.add.group();
-    this.enemyBullets.createMultiple(30, 'enemyBullet');
-    this.enemyBullets.setAll('events.onOutOfBounds.add', 'events.onOutOfBounds', true);
-    
     //  The score
     this.scoreString = 'Score : ';
     this.scoreText = this.add.text(10, 30, this.scoreString + this.score, { fontSize: '34px', fill: '#fff' });
 
     //  Lives
     this.lives = this.add.group();
-    this.add.text(this.world.width - 350, 30, 'Lives : ', { fontSize: '34px', fill: '#fff' });
+    this.add.text(this.world.width - 300, 30, 'Lives : ', { fontSize: '34px', fill: '#fff' });
 
     //  Text
     this.stateText = this.add.text(this.world.centerX,this.world.centerY,'', { fontSize: '84px', fill: '#fff' });
@@ -71,8 +66,8 @@
 
     for (var i = 0; i < 3; i++) 
     {
-        this.ship = this.lives.create(this.world.width - 150 + (70 * i), 60, 'spaceship');
-        this.ship.anchor.setTo(2, 0.5);
+        this.ship = this.lives.create(this.world.width - 100 + (70 * i), 60, 'spaceship');
+        this.ship.anchor.setTo(1.85, 0.5);
         this.ship.alpha = 0.38;
     }
 
@@ -116,11 +111,11 @@
       this.player.y +=6,2;
     }
 
-    if (this.input.keyboard.isDown(Phaser.Keyboard.A) && this.player.x>8)
+    if (this.input.keyboard.isDown(Phaser.Keyboard.A) && this.player.x>10)
     {
       this.player.x -=6,2;
     }
-    else if (this.input.keyboard.isDown(Phaser.Keyboard.D) &&this.player.x<960)
+    else if (this.input.keyboard.isDown(Phaser.Keyboard.D) &&this.player.x<1018)
     {
       this.player.x +=6,2;
     }
@@ -134,13 +129,19 @@
 
 
     this.physics.overlap(this.bullets, this.enemys, function(bullet,enemy) { bullet.kill(); enemy.kill();if(enemy.kill() && bullet.kill()){this.score += 20;this.scoreText.content = this.scoreString + this.score;}}, null, this); //Añade puntuacion y mata al enemigo y bullet
-    this.physics.overlap(this.player, this.enemys, function(player,enemy) { enemy.kill(); player.damage(0.34); this.live = this.lives.getFirstAlive();if (this.live){this.live.kill();}}, null, this); //reduce 1na vida de player y mata enemigo.
+    this.physics.overlap(this.player, this.enemys, function(player,enemy) { enemy.kill(); player.damage(0.34); this.live = this.lives.getFirstAlive();if (this.live){this.live.kill();};this.vidas -=1}, null, this); //reduce 1na vida de player y mata enemigo.
     this.physics.overlap(this.enemys, this.enemys, function(enemy) { enemy.kill();}, null, this);
     this.physics.overlap(this.asteroids, this.asteroids,  function(asteroid){asteroid.kill();}, null, this);
     this.physics.overlap(this.enemys, this.asteroids, function(enemy){enemy.kill();}, null, this);
-    this.physics.overlap(this.player, this.asteroids, function(player) {player.kill();this.live = this.lives.getFirstAlive();if (this.live){this.live.kill();}}, null, this);//hace falta mejorar con el tiempo my friend...
+    this.physics.overlap(this.player, this.asteroids, function(player) {player.kill();this.live = this.lives.getFirstAlive();if(this.live){this.live.kill();}this.vidas -=3}, null, this);//hace falta mejorar con el tiempo my friend...
     this.physics.overlap(this.bullets, this.asteroids, function(asteroid) {asteroid.kill();}, null, this);
 
+    if (this.vidas <= 0)
+    {
+      this.game.state.start('Endgame');
+      console.log("fin de juego")
+    }
+    this.background.tilePosition.y += 3;
   },
   
   fireBullet: function() 
@@ -151,7 +152,7 @@
       this.bullet = this.bullets.getFirstExists(false);
       if (this.bullet)
       {
-        this.bullet.reset(this.player.x, this.player.y - 31 );
+        this.bullet.reset(this.player.x + 20, this.player.y - 50);
         this.bullet.body.velocity.y = -900;
         this.bulletTime = this.time.now + 200;
       }
