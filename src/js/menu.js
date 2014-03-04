@@ -15,10 +15,10 @@
       this.titleTxt.anchor.setTo(0.5, 0.5);
       this.startButton = this.add.button(this.world.centerX, 300, 'startButton', function(){this.game.state.start('game');}, this, 2, 1, 0);
       this.startButton.anchor.setTo(0.5, 0.5);
-      this.highscoreButton = this.add.button(this.world.centerX, 400, 'highscoreButton', function(){this.game.state.start('highscore');}, this, 2, 1, 0);
+      /*this.highscoreButton = this.add.button(this.world.centerX, 400, 'highscoreButton', function(){this.game.state.start('highscore');}, this, 2, 1, 0);
       this.highscoreButton.anchor.setTo(0.5, 0.5);
       this.optionsButton = this.add.button(this.world.centerX, 500, 'optionsButton', function(){this.game.state.start('options');}, this, 2, 1, 0);
-      this.optionsButton.anchor.setTo(0.5, 0.5);
+      this.optionsButton.anchor.setTo(0.5, 0.5);*/
       
     },
 

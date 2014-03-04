@@ -1,4 +1,4 @@
-(function() {
+/*(function() {
   'use strict';
 
   function Highscore() {
@@ -32,4 +32,4 @@
   window['SuperShooter'] = window['SuperShooter'] || {};
   window['SuperShooter'].Highscore = Highscore;
 
-}());
+}());*/

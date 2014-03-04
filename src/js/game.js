@@ -1,7 +1,6 @@
 (function()
 {
   'use strict';
-  //PROBLEMA CPN LAS LLAVES A LA HORA DE COMBINAR METEROITOS CON NAVES ENEMIGAS MIRARLO!
   function Game()
   {
     this.player = null;
@@ -42,8 +41,14 @@
 
 //generar grupo asteroides
     this.asteroids = this.add.group();
-    this.asteroids.createMultiple(12, 'asteroids');
+    this.asteroids.createMultiple(12, 'asteroides medianos');
     this.asteroids.setAll('outOfBoundsKill', true);
+    
+    //this.asteroids.animations.add('fly', [0,1,2,3], 20, true);
+    /*this.asteroids = this.add.sprite(72, 72, 'asteroids');
+    this.asteroids.animations.add('rotate');
+    this.asteroids.animations.play('rotate', 15, true);*/
+    //this.asteroids.play('fly');
 
 //generar bullets enemigo
     this.enemyBullets = this.add.group();
@@ -68,7 +73,7 @@
     {
         this.ship = this.lives.create(this.world.width - 150 + (70 * i), 60, 'spaceship');
         this.ship.anchor.setTo(2, 0.5);
-        this.ship.alpha = 0.3;
+        this.ship.alpha = 0.38;
     }
 
     },
@@ -85,10 +90,10 @@
     this.asteroidCheck = this.asteroids.getFirstExists(false);
     if (this.asteroidCheck)
     {
-      this.asteroidCheck.reset(Math.random()*1000, -100);
-      this.asteroidCheck.body.velocity.y = ((0.4 + Math.random())* 400);
-      //this.asteroidCheck.body.velocity.y = 200;
+      this.asteroidCheck.reset(Math.random()*1020, -100);
+      this.asteroidCheck.body.velocity.y = ((0.35 + Math.random())* 400);
     }
+
 //naves enemigas
         
     this.enemysCheck = this.enemys.getFirstExists(false);
