@@ -14,6 +14,7 @@
         
       this.titleTxt = this.add.bitmapText(x, 200, 'Game Over', {font: '16px minecraftia', align: 'center'});
       this.titleTxt.anchor.setTo(0.5, 0.5);
+      this.instructionsText = this.add.bitmapText (375, 250, 'Pulsa ENTER para volver a jugar', {font: '16px minecraftia', align: 'center'});
     },
 
     update: function () {

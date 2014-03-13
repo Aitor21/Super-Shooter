@@ -47,7 +47,7 @@ this.background = this.game.add.tileSprite(0, 0, 1080, 1000, 'background');
 
 //generar grupo asteroides
     this.asteroids = this.add.group();
-    this.asteroids.createMultiple(12, 'asteroides medianos');
+    this.asteroids.createMultiple(11, 'asteroides medianos');
     this.asteroids.setAll('outOfBoundsKill', true);
     
     //  The score
